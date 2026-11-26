@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ikromov Kutubxona — Telegram Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #F5F7F6;
+      --card-bg: #FFFFFF;
+      --green-dark: #14452F;
+      --green-primary: #1E6B47;
+      --green-light: #E8F3EE;
+      --gold: #F59E0B;
+      --gold-bg: #FEF3C7;
+      --text-main: #111827;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow-sm: 0 2px 10px rgba(17, 24, 39, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      padding-bottom: 88px;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .topbar {
+      background: var(--card-bg);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--green-dark);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-name span {
+      font-weight: 500;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .coin-pill {
+      background: var(--gold-bg);
+      color: #B45309;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .avatar-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+    }
+
+    .container {
+      padding: 18px 16px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .greeting h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .greeting p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Hero Banner */
+    .hero-card {
+      margin-top: 16px;
+      background: linear-gradient(135deg, #113826 0%, #1E6B47 100%);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(20, 69, 47, 0.22);
+    }
+
+    .hero-card::after {
+      content: "📚";
+      position: absolute;
+      right: 16px;
+      bottom: 10px;
+      font-size: 64px;
+      opacity: 0.14;
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #A7F3D0;
+      margin-bottom: 6px;
+    }
+
+    .hero-card h2 {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .hero-card p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.82);
+      margin-top: 6px;
+      max-width: 85%;
+      line-height: 1.45;
+    }
+
+    .hero-actions {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta {
+      background: rgba(255, 255, 255, 0.14);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .btn-white {
+      background: #FFFFFF;
+      color: var(--green-dark);
+      border: none;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s ease;
+    }
+
+    .btn-white:active {
+      transform: scale(0.97);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat-box {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      padding: 14px 12px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    /* Daily Bonus Card */
+    .bonus-card {
+      margin-top: 14px;
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .bonus-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bonus-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--green-light);
+      color: var(--green-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .bonus-title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .bonus-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-green {
+      background: var(--green-primary);
+      color: #FFFFFF;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-green:disabled {
+      background: #D1D5DB;
+      color: #6B7280;
+      cursor: default;
+    }
+
+    /* Section Header & Search */
+    .section-header {
+      margin-top: 22px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+    }
+
+    .search-box {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    .search-box:focus {
+      border-color: var(--green-primary);
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+
+    .chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip.active {
+      background: var(--green-dark);
+      color: #FFFFFF;
+      border-color: var(--green-dark);
+    }
+
+    /* Book Cards */
+    .book-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .book-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+
+    .book-card:active {
+      transform: scale(0.99);
+    }
+
+    .book-cover {
+      width: 58px;
+      height: 78px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: #fff;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .book-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .book-cat {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green-primary);
+      text-transform: uppercase;
+    }
+
+    .book-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .book-author {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .book-bottom {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .book-pages {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .read-pill {
+      background: var(--green-light);
+      color: var(--green-dark);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* How it works steps */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 13.5px;
+    }
+
+    .step-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 12px;
+      z-index: 40;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .nav-item.active {
+      color: var(--green-primary);
+    }
+
+    .nav-icon {
+      font-size: 19px;
+    }
+
+    /* Modal / Reader View */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-main);
+      z-index: 60;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .reader-header {
+      background: var(--card-bg);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-btn {
+      background: var(--green-light);
+      color: var(--green-dark);
+      border: none;
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .font-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .font-btn {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .reader-body {
+      padding: 20px 18px 40px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .chapter-list-item {
+      background: var(--card-bg);
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+    }
+
+    .reader-content-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      box-shadow: var(--shadow-sm);
+      line-height: 1.75;
+      font-size: 16px;
+      color: #1F2937;
+    }
+
+    .reader-content-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--green-dark);
+    }
+
+    .reader-content-card p {
+      margin-bottom: 14px;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .toast {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green-dark);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Top Header -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-logo">📖</div>
+      <div class="brand-name">
+        Ikromov
+        <span>Kutubxona</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="coin-pill">🪙 <span id="coinCount">20</span></div>
+      <button class="avatar-btn" id="avatarInitial" onclick="switchTab('profile')">U</button>
+    </div>
+  </header>
+
+  <!-- TAB 1: ASOSIY -->
+  <main id="tab-home" class="container">
+    <div class="greeting">
+      <h1>Salom, <span id="userName">Umar</span></h1>
+      <p>Bugun ham mutolaani davom ettiramiz</p>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="hero-card">
+      <div class="hero-badge">ONLAYN KUTUBXONA</div>
+      <h2 id="heroBookTitle">Python Dasturlash Asoslari</h2>
+      <p id="heroBookDesc">Barcha kitoblar va boblarni to‘g‘ridan-to‘g‘ri Telegram ichida qulay o‘qing.</p>
+      <div class="hero-actions">
+        <div class="hero-meta"><span id="totalBooksBadge">4 kitob</span> • Bepul</div>
+        <button class="btn-white" onclick="continueReading()">O‘qishni ochish →</button>
+      </div>
+    </div>
+
+    <!-- 3 Stat Boxes -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-num" id="streakCount">1</div>
+        <div class="stat-label">Kunlik seriya</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="readChaptersCount">0</div>
+        <div class="stat-label">O‘qilgan bob</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statCoins">20</div>
+        <div class="stat-label">Ballar</div>
+      </div>
+    </div>
+
+    <!-- Daily Free Bonus -->
+    <div class="bonus-card">
+      <div class="bonus-left">
+        <div class="bonus-icon">🎁</div>
+        <div>
+          <div class="bonus-title">Kunlik Bepul Ball</div>
+          <div class="bonus-sub" id="bonusSub">Har kuni +10 ball olish imkoniyati</div>
+        </div>
+      </div>
+      <button class="btn-green" id="claimBtn" onclick="claimDailyBonus()">Olish</button>
+    </div>
+
+    <!-- Popular Books -->
+    <div class="section-header">
+      <span class="section-title">Tavsiya etilgan kitoblar</span>
+    </div>
+    <div class="book-list" id="homeBookList"></div>
+
+    <!-- How it works -->
+    <div class="section-header">
+      <span class="section-title">Qanday ishlaydi</span>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">Kitobni tanlang</div>
+        <div class="step-desc">Dasturlash yoki badiiy adabiyotlardan birini oching</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">Bobni oching</div>
+        <div class="step-desc">Har bir kitob qulay kichik boblarga bo‘lingan</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">Matnni moslang</div>
+        <div class="step-desc">Shrift o‘lchamini ko‘zingizga moslab o‘qing</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-title">Progress saqlanadi</div>
+        <div class="step-desc">To‘xtagan joyingizdan istalgan vaqt davom eting</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: KITOBLAR -->
+  <section id="tab-books" class="container hidden">
+    <div class="greeting" style="margin-bottom: 14px;">
+      <h1>Barcha kitoblar</h1>
+      <p>Kerakli kitobni tanlang va mutolaani boshlang</p>
+    </div>
+
+    <input type="text" class="search-box" id="searchInput" placeholder="Kitob yoki muallif nomi bo‘yicha qidirish..." oninput="renderBooksTab()" />
+
+    <div class="chips" id="categoryChips">
+      <button class="chip active" onclick="setCategory('Barchasi', this)">Barchasi</button>
+      <button class="chip" onclick="setCategory('Dasturlash', this)">Dasturlash</button>
+      <button class="chip" onclick="setCategory('Badiiy', this)">Badiiy</button>
+      <button class="chip" onclick="setCategory('Shaxsiy rivojlanish', this)">Shaxsiy rivojlanish</button>
+    </div>
+
+    <div class="book-list" id="allBookList"></div>
+  </section>
+
+  <!-- TAB 3: SAQLANGANLAR -->
+  <section id="tab-saved" class="container hidden">
+    <div class="greeting" style="margin-bottom: 14px;">
+      <h1>Saqlangan kitoblar</h1>
+      <p>Sevimli kitoblaringiz ro‘yxati</p>
+    </div>
+    <div class="book-list" id="savedBookList"></div>
+  </section>
+
+  <!-- TAB 4: PROFIL -->
+  <section id="tab-profile" class="container hidden">
+    <div class="greeting" style="margin-bottom: 14px;">
+      <h1>Shaxsiy profil</h1>
+      <p>Telegram hisobingiz bilan bog‘langan</p>
+    </div>
+
+    <div class="bonus-card" style="flex-direction: column; align-items: flex-start; gap: 14px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="avatar-btn" style="width:52px; height:52px; font-size:20px;" id="profileAvatar">U</div>
+        <div>
+          <div class="bonus-title" style="font-size:17px;" id="profileName">Umar</div>
+          <div class="bonus-sub" id="profileUsername">@ikromov_lvl</div>
+        </div>
+      </div>
+      <div style="width:100%; border-top:1px solid var(--border); padding-top:12px; display:flex; justify-content:space-between; font-size:13.5px;">
+        <span style="color:var(--text-muted);">Jami to‘plangan ball:</span>
+        <strong id="profileCoins">20 ball</strong>
+      </div>
+      <div style="width:100%; display:flex; justify-content:space-between; font-size:13.5px;">
+        <span style="color:var(--text-muted);">O‘qilgan boblar soni:</span>
+        <strong id="profileChapters">0 ta</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- READER / BOOK DETAILS MODAL -->
+  <div id="readerModal" class="modal-overlay">
+    <div class="reader-header">
+      <button class="back-btn" id="modalBackBtn" onclick="handleModalBack()">← Orqaga</button>
+      <div style="font-weight:700; font-size:14px; max-width:50%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="modalTitle">Kitob</div>
+      <div class="font-controls" id="fontControls">
+        <button class="font-btn" onclick="changeFontSize(-1)">A-</button>
+        <button class="font-btn" onclick="changeFontSize(1)">A+</button>
+        <button class="font-btn" id="bookmarkBtn" onclick="toggleSaveBook()">🤍</button>
+      </div>
+    </div>
+
+    <div class="reader-body">
+      <!-- View A: Chapters List -->
+      <div id="chaptersView"></div>
+
+      <!-- View B: Reading Text -->
+      <div id="readingView" class="hidden">
+        <div class="reader-content-card" id="chapterTextContainer"></div>
+        <div class="chapter-nav">
+          <button class="back-btn" id="prevChapBtn" onclick="navigateChapter(-1)">← Oldingi bob</button>
+          <button class="btn-green" id="nextChapBtn" onclick="navigateChapter(1)">Keyingi bob →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('home', this)">
+      <span class="nav-icon">🏠</span>
+      <span>Asosiy</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('books', this)">
+      <span class="nav-icon">📚</span>
+      <span>Kitoblar</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('saved', this)">
+      <span class="nav-icon">🔖</span>
+      <span>Saqlangan</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('profile', this)">
+      <span class="nav-icon">👤</span>
+      <span>Profil</span>
+    </button>
+  </nav>
+
+  <script>
+    // 1. Telegram WebApp initialization
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor('#FFFFFF');
+      tg.setBackgroundColor('#F5F7F6');
+    }
+
+    // 2. Books Database
+    const BOOKS = [
+      {
+        id: 'python-basics',
+        title: 'Python Dasturlash Asoslari',
+        author: 'Umar Ikromov',
+        category: 'Dasturlash',
+        color: '#1E6B47',
+        icon: '🐍',
+        chapters: [
+          {
+            title: '1-bob: O‘zgaruvchilar va ma’lumot turlari',
+            content: `<p>Python — o‘rganishga oson, lekin imkoniyatlari juda keng dasturlash tili. Unda o‘zgaruvchi yaratish uchun alohida kalit so‘z yozish shart emas.</p>
+            <p>Masalan: <b>ism = "Umar"</b> yoki <b>ball = 95</b>. Asosiy ma’lumot turlari: matnlar (str), butun sonlar (int), o‘nlik sonlar (float) va mantiqiy qiymatlar (bool).</p>
+            <p>Har bir dasturchi ma’lumot turlarini to‘g‘ri ajrata olishi keyingi murakkab algoritmlarni tushunishda poydevor bo‘ladi.</p>`
+          },
+          {
+            title: '2-bob: Ro‘yxatlar (List) va Lug‘atlar (Dict)',
+            content: `<p>Ma’lumotlarni tartibli saqlash uchun <b>list</b> va <b>dict</b> tuzilmalari eng ko‘p ishlatiladi.</p>
+            <p>Lug‘at (dictionary) ma’lumotlarni <b>kalit: qiymat</b> ko‘rinishida saqlaydi. Masalan, foydalanuvchi profili yoki kitoblar katalogini aynan lug‘atlar yordamida tezkor boshqarish mumkin.</p>
+            <p>Set (to‘plam) esa takrorlanmas elementlar bilan ishlash va ro‘yxatdan dublikatlarni olib tashlash uchun juda qulay.</p>`
+          },
+          {
+            title: '3-bob: Funksiyalar va modullar',
+            content: `<p>Kodni qayta-qayta yozmaslik uchun funksiyalardan (<b>def</b>) foydalanamiz. Yaxshi funksiya bitta aniq vazifani bajaradi.</p>
+            <p>Katta loyihalarda kodni alohida fayllarga bo‘lib, modullar sifatida ulash dasturni tartibli va tushunarli saqlaydi.</p>`
+          }
+        ]
+      },
+      {
+        id: 'otkan-kunlar',
+        title: 'O‘tkan kunlar (Tanlangan boblar)',
+        author: 'Abdulla Qodiriy',
+        category: 'Badiiy',
+        color: '#14452F',
+        icon: '📜',
+        chapters: [
+          {
+            title: '1-bob: Otabek va Hasanali',
+            content: `<p>1264-inchi hijriya, dalv oyining o‘n yettinchisi, qishki kunlarning biri, quyosh botqan, tevarakdan shom azoni eshitiladir...</p>
+            <p>Marg‘ilonning eng ko‘rkam karvonsaroylaridan birida toshkentlik savdogar Otabek va uning sodiq hamrohi Hasanali suhbatlashib o‘tirar edilar.</p>`
+          },
+          {
+            title: '2-bob: Marg‘ilon havosi',
+            content: `<p>Otabek Marg‘ilonga kelganidan beri bu shaharning osoyishtaligi va odamlarining mehmondo‘stligiga alohida mehr qo‘ygan edi.</p>
+            <p>Har bir suhbat va uchrashuv uning hayotida yangi sahifalarni ochishga sabab bo‘la boshladi.</p>`
+          }
+        ]
+      },
+      {
+        id: 'atomic-habits',
+        title: 'Atom Odatlar (Qisqa mazmun)',
+        author: 'Jeyms Klir',
+        category: 'Shaxsiy rivojlanish',
+        color: '#2563EB',
+        icon: '⚡',
+        chapters: [
+          {
+            title: '1-bob: Har kuni 1% yaxshilanish kuchi',
+            content: `<p>Katta o‘zgarishlar bir kunda sodir bo‘lmaydi. Agar har kuni o‘z ustingizda atigi 1 foizga ko‘proq ishlasangiz, bir yil ichida 37 barobar o‘sishga erishasiz.</p>
+            <p>Maqsadlarga emas, tizimga e’tibor qarating. Kuniga 15 daqiqa kitob o‘qish odati bir yilda o‘nlab kitoblarni tugatishga olib keladi.</p>`
+          },
+          {
+            title: '2-bob: Odatni oson va jozibali qilish',
+            content: `<p>Yangi odatni shakllantirish uchun uni ko‘rinadigan, jozibali, oson va qoniqarli qiling.</p>
+            <p>Masalan, telefon ekranining asosiy joyiga o‘yinlar o‘rniga kutubxona ilovasini qo‘yish mutolaa ehtimolini bir necha barobar oshiradi.</p>`
+          }
+        ]
+      },
+      {
+        id: 'clean-code',
+        title: 'Toza Kod Yozish San’ati',
+        author: 'Robert Martin',
+        category: 'Dasturlash',
+        color: '#0F766E',
+        icon: '💻',
+        chapters: [
+          {
+            title: '1-bob: Ma’noli nomlar tanlash',
+            content: `<p>O‘zgaruvchi va funksiyalarga shunday nom beringki, izoh (comment) yozishga hojat qolmasin.</p>
+            <p><b>d = 10</b> o‘rniga <b>daysUntilDeadline = 10</b> deb yozish kodni boshqalar va kelajakdagi o‘zingiz uchun tushunarli qiladi.</p>`
+          }
+        ]
+      }
+    ];
+
+    // 3. State Management
+    let state = JSON.parse(localStorage.getItem('ikromov_library_state')) || {
+      coins: 20,
+      streak: 1,
+      lastBonusDate: null,
+      readChapters: [],
+      savedBooks: ['python-basics'],
+      lastBookId: 'python-basics',
+      lastChapterIdx: 0,
+      fontSize: 16
+    };
+
+    let currentCategory = 'Barchasi';
+    let activeBook = null;
+    let activeChapterIndex = null;
+
+    function saveState() {
+      localStorage.setItem('ikromov_library_state', JSON.stringify(state));
+      updateUIStats();
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // 4. Initialize User Info from Telegram
+    function initUser() {
+      const tgUser = tg?.initDataUnsafe?.user;
+      const firstName = tgUser?.first_name || 'Umar';
+      const username = tgUser?.username ? `@${tgUser.username}` : '@ikromov_lvl';
+
+      document.getElementById('userName').textContent = firstName;
+      document.getElementById('profileName').textContent = firstName;
+      document.getElementById('profileUsername').textContent = username;
+
+      const initial = firstName.charAt(0).toUpperCase();
+      document.getElementById('avatarInitial').textContent = initial;
+      document.getElementById('profileAvatar').textContent = initial;
+    }
+
+    function updateUIStats() {
+      document.getElementById('coinCount').textContent = state.coins;
+      document.getElementById('statCoins').textContent = state.coins;
+      document.getElementById('profileCoins').textContent = `${state.coins} ball`;
+      document.getElementById('streakCount').textContent = state.streak;
+      document.getElementById('readChaptersCount').textContent = state.readChapters.length;
+      document.getElementById('profileChapters').textContent = `${state.readChapters.length} ta`;
+      document.getElementById('totalBooksBadge').textContent = `${BOOKS.length} kitob`;
+
+      const lastBook = BOOKS.find(b => b.id === state.lastBookId) || BOOKS[0];
+      document.getElementById('heroBookTitle').textContent = lastBook.title;
+
+      const today = new Date().toDateString();
+      const btn = document.getElementById('claimBtn');
+      if (state.lastBonusDate === today) {
+        btn.disabled = true;
+        btn.textContent = 'Olindi ✓';
+        document.getElementById('bonusSub').textContent = 'Bugungi bonus olindi. Ertaga yana kiring!';
+      }
+    }
+
+    function claimDailyBonus() {
+      const today = new Date().toDateString();
+      if (state.lastBonusDate === today) return;
+
+      state.coins += 10;
+      state.streak += 1;
+      state.lastBonusDate = today;
+      saveState();
+      showToast('+10 ball qo‘shildi! 🎉');
+    }
+
+    // 5. Render Book Cards
+    function createBookCardHTML(book) {
+      return `
+        <div class="book-card" onclick="openBook('${book.id}')">
+          <div class="book-cover" style="background:${book.color};">${book.icon}</div>
+          <div class="book-info">
+            <div class="book-cat">${book.category}</div>
+            <div class="book-title">${book.title}</div>
+            <div class="book-author">${book.author}</div>
+            <div class="book-bottom">
+              <span class="book-pages">${book.chapters.length} ta bob</span>
+              <span class="read-pill">O‘qish →</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHomeBooks() {
+      const list = document.getElementById('homeBookList');
+      list.innerHTML = BOOKS.slice(0, 3).map(createBookCardHTML).join('');
+    }
+
+    function setCategory(cat, el) {
+      currentCategory = cat;
+      document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderBooksTab();
+    }
+
+    function renderBooksTab() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = BOOKS.filter(book => {
+        const matchCat = currentCategory === 'Barchasi' || book.category === currentCategory;
+        const matchQuery = book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query);
+        return matchCat && matchQuery;
+      });
+
+      const list = document.getElementById('allBookList');
+      list.innerHTML = filtered.length
+        ? filtered.map(createBookCardHTML).join('')
+        : '<p style="text-align:center; color:var(--text-muted); padding:24px;">Kitob topilmadi</p>';
+    }
+
+    function renderSavedTab() {
+      const saved = BOOKS.filter(b => state.savedBooks.includes(b.id));
+      const list = document.getElementById('savedBookList');
+      list.innerHTML = saved.length
+        ? saved.map(createBookCardHTML).join('')
+        : '<p style="text-align:center; color:var(--text-muted); padding:24px;">Hozircha saqlangan kitoblar yo‘q</p>';
+    }
+
+    // 6. Navigation Tabs
+    function switchTab(tabName, btnEl) {
+      ['home', 'books', 'saved', 'profile'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+      });
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if (btnEl) {
+        btnEl.classList.add('active');
+      } else {
+        const idx = ['home', 'books', 'saved', 'profile'].indexOf(tabName);
+        document.querySelectorAll('.nav-item')[idx]?.classList.add('active');
+      }
+
+      if (tabName === 'books') renderBooksTab();
+      if (tabName === 'saved') renderSavedTab();
+    }
+
+    // 7. Book & Reader Modal Logic
+    function openBook(bookId) {
+      activeBook = BOOKS.find(b => b.id === bookId);
+      if (!activeBook) return;
+
+      activeChapterIndex = null;
+      document.getElementById('modalTitle').textContent = activeBook.title;
+      document.getElementById('chaptersView').classList.remove('hidden');
+      document.getElementById('readingView').classList.add('hidden');
+      updateBookmarkBtn();
+
+      const chaptersHTML = `
+        <div style="background:var(--card-bg); padding:18px; border-radius:18px; margin-bottom:16px; box-shadow:var(--shadow-sm);">
+          <div style="font-size:12px; font-weight:700; color:var(--green-primary);">${activeBook.category.toUpperCase()}</div>
+          <h2 style="font-size:20px; font-weight:800; margin-top:4px;">${activeBook.title}</h2>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Muallif: ${activeBook.author} • ${activeBook.chapters.length} bob</p>
+        </div>
+        <div class="section-title" style="margin-bottom:10px;">Mundarija</div>
+        ${activeBook.chapters.map((ch, idx) => {
+          const isRead = state.readChapters.includes(`${activeBook.id}-${idx}`);
+          return `
+            <div class="chapter-list-item" onclick="openChapter(${idx})">
+              <div>
+                <div style="font-weight:700; font-size:14px;">${ch.title}</div>
+                <div style="font-size:12px; color:${isRead ? 'var(--green-primary)' : 'var(--text-muted)'}; margin-top:3px;">
+                  ${isRead ? '✓ O‘qilgan' : 'O‘qish uchun bosing'}
+                </div>
+              </div>
+              <span style="color:var(--green-primary); font-weight:800;">→</span>
+            </div>
+          `;
+        }).join('')}
+      `;
+
+      document.getElementById('chaptersView').innerHTML = chaptersHTML;
+      document.getElementById('readerModal').classList.add('open');
+    }
+
+    function openChapter(idx) {
+      activeChapterIndex = idx;
+      const chapter = activeBook.chapters[idx];
+      if (!chapter) return;
+
+      state.lastBookId = activeBook.id;
+      state.lastChapterIdx = idx;
+      const key = `${activeBook.id}-${idx}`;
+      if (!state.readChapters.includes(key)) {
+        state.readChapters.push(key);
+        state.coins += 2;
+        showToast('Bob tugallandi: +2 ball!');
+      }
+      saveState();
+
+      document.getElementById('chaptersView').classList.add('hidden');
+      document.getElementById('readingView').classList.remove('hidden');
+
+      const container = document.getElementById('chapterTextContainer');
+      container.style.fontSize = `${state.fontSize}px`;
+      container.innerHTML = `<h3>${chapter.title}</h3>${chapter.content}`;
+
+      document.getElementById('prevChapBtn').style.visibility = idx > 0 ? 'visible' : 'hidden';
+      document.getElementById('nextChapBtn').textContent =
+        idx < activeBook.chapters.length - 1 ? 'Keyingi bob →' : 'Tugatish ✓';
+    }
+
+    function navigateChapter(dir) {
+      const nextIdx = activeChapterIndex + dir;
+      if (nextIdx >= 0 && nextIdx < activeBook.chapters.length) {
+        openChapter(nextIdx);
+        document.getElementById('readerModal').scrollTop = 0;
+      } else {
+        openBook(activeBook.id);
+      }
+    }
+
+    function handleModalBack() {
+      if (activeChapterIndex !== null) {
+        openBook(activeBook.id);
+      } else {
+        document.getElementById('readerModal').classList.remove('open');
+        activeBook = null;
+      }
+    }
+
+    function continueReading() {
+      const bookId = state.lastBookId || BOOKS[0].id;
+      const chapIdx = state.lastChapterIdx || 0;
+      openBook(bookId);
+      openChapter(chapIdx);
+    }
+
+    function changeFontSize(delta) {
+      state.fontSize = Math.min(24, Math.max(13, state.fontSize + delta));
+      document.getElementById('chapterTextContainer').style.fontSize = `${state.fontSize}px`;
+      saveState();
+    }
+
+    function updateBookmarkBtn() {
+      if (!activeBook) return;
+      const isSaved = state.savedBooks.includes(activeBook.id);
+      document.getElementById('bookmarkBtn').textContent = isSaved ? '❤️' : '🤍';
+    }
+
+    function toggleSaveBook() {
+      if (!activeBook) return;
+      const idx = state.savedBooks.indexOf(activeBook.id);
+      if (idx > -1) {
+        state.savedBooks.splice(idx, 1);
+        showToast('Saqlanganlardan olib tashlandi');
+      } else {
+        state.savedBooks.push(activeBook.id);
+        showToast('Saqlanganlarga qo‘shildi ❤️');
+      }
+      saveState();
+      updateBookmarkBtn();
+    }
+
+    // Boot
+    initUser();
+    updateUIStats();
+    renderHomeBooks();
+  </script>
+</body>
+</html>
